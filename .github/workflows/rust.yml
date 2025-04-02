@@ -22,3 +22,21 @@ jobs:
       
     - name: Run tests
       run: cargo test --verbose
+      
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build release
+      run: cargo build --release --verbose
+      
+    - name: Create GitHub Release
+      run: |
+        RELEASE_NAME="Release ${{ github.ref }}"
+        git tag -a ${{ github.ref }} -m "Release version ${{ github.ref }}"
+        gh release create ${{ github.ref }} target/release/* --title "$RELEASE_NAME" --notes "Release notes for ${{ github.ref }}."
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
