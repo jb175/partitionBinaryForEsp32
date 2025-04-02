@@ -1,0 +1,7 @@
+[package]
+name = "partitionBinaryForEsp32"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+esp-idf-part = { version = "0.5"}
